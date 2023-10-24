@@ -10,7 +10,7 @@ Before diving into our analysis, it's crucial to grasp the fundamentals of Lasso
 
 ![Lasso Objective Function](assets/lasso_objective.png)
 
-In our implementation, we employ the ISTA to solve this problem iteratively. It's worth noting that we've provided hints for efficient coding, such as the use of matrix libraries for matrix operations and selecting a suitable stopping condition. Additionally, we'll explore a range of λ values to create a regularization path and find λmax to initiate this path.
+In our implementation, we employ the ISTA to solve this problem iteratively. Additionally, we'll explore a range of λ values to create a regularization path and find λmax to initiate this path.
 
 ## Investigating Synthetic Data
 
