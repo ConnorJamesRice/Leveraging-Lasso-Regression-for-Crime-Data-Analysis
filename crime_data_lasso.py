@@ -12,7 +12,6 @@ from utils import load_dataset, problem
 def MSE(X,y):
     return(np.mean((X-y)**2))
 
-@problem.tag("hw2-A", start_line=3)
 def main():
     # df_train and df_test are pandas dataframes.
     # Make sure you split them into observations and targets
