@@ -6,21 +6,83 @@ This GitHub README is a comprehensive exploration of the application of Lasso re
 
 ## Getting Started
 
-Before we delve into the depths of our analysis, it's essential to take the following initial steps:
+Before diving into the analysis, it's crucial to understand the fundamental underpinnings of the Lasso regression and the iterative shrinkage thresholding algorithm that we will implement to solve it. The Lasso problem, in this context, is defined as follows:
 
-1. Obtain the training dataset, "crime-train.txt," and the test dataset, "crime-test.txt," from the provided source.
-2. Store these datasets in your working directory.
-3. Ensure that the Pandas library for Python is installed, as it will be our primary tool for data manipulation.
+Given λ > 0 and data (xi, yi) for i = 1 to n, the Lasso problem is to find:
 
-Here's a code snippet to read the data into Pandas DataFrames:
+arg min w∈Rd, b∈R Σi=1 to n ((xiᵀw + b - yi)² + λ * Σj=1 to d |wj|)
 
-```python
-import pandas as pd
-df_train = pd.read_table("crime-train.txt")
-df_test = pd.read_table("crime-test.txt")
+In our programming tasks, we will implement the Iterative Shrinkage Thresholding Algorithm (ISTA) to solve the Lasso problem. This algorithm is a variant of the subgradient descent method and is described by Algorithm 1:
+
+**Algorithm 1: Iterative Shrinkage Thresholding Algorithm for Lasso**
+
+Input: Step size η
+
+```
+while not converged do
+  b0 ← b - 2η Σi=1 to n (xiᵀw + b - yi)
+  
+  for k ∈ {1, 2, · · · d} do
+    w0k ← wk - 2η Σi=1 to n xi,k(xiᵀw + b - yi)
+    
+    w0k ←
+    
+    
+    
+    
+    w0k + 2ηλ  if w0k < -2ηλ
+    0 if -2ηλ ≤ w0k ≤ 2ηλ
+    w0k - 2ηλ  if w0k > 2ηλ
+    end
+  b ← b0, w ← w0
+end
 ```
 
-## Unveiling Insights: Features and Their Impact
+Before we dive into the practical implementation, here are some useful hints to consider:
+
+- Utilize matrix libraries for matrix operations instead of loops, especially when updating w. The use of numpy functions can significantly improve efficiency.
+- Regularly check if the objective value is non-increasing at each step.
+- Define a suitable stopping condition. Typically, the algorithm stops when no element of w changes by more than a small δ during an iteration. Adjusting this condition can improve algorithm performance.
+- Efficiently solve the Lasso problem on the same dataset for various values of λ to create a regularization path. To do this, start with a large λ and then decrease it by a constant ratio (e.g., a factor of 2) for each consecutive solution.
+- Calculate the value of λmax using Equation (1) to determine the first λ in the regularization path.
+
+## Investigating Synthetic Data
+
+As a prelude to our analysis, we will begin by working with synthetic data that helps us understand the capabilities of the Lasso in distinguishing relevant and irrelevant features. The data generation process follows a model with the following specifications:
+
+- n = 500 (number of data points)
+- d = 1000 (number of features)
+- k = 100 (number of relevant features)
+- σ = 1 (noise level)
+
+The data generation model follows the equation yi = wᵀxi + εᵢ, where w is defined as per Equation (2):
+
+```
+wj =
+(
+j/k if j ∈ {1, . . . , k}
+0 otherwise
+```
+
+The εᵢ values are independently drawn from a normal distribution N(0, 1).
+
+## Analyzing Lasso Solutions
+
+### a. Analyzing Non-Zeros as a Function of λ
+
+With our synthetic data, we embark on a journey to solve multiple Lasso problems on a regularization path. We start at λmax, where no features are selected (as per Equation (1)), and gradually decrease λ by a constant ratio (e.g., 2) until nearly all features are chosen. In Plot 1, we visualize the number of non-zeros as a function of λ on the x-axis, with a logarithmic scale for λ (Tip: use plt.xscale('log')).
+
+### b. Evaluating False Discovery Rate (FDR) and True Positive Rate (TPR)
+
+For each λ value we explore, we record the values for False Discovery Rate (FDR) and True Positive Rate (TPR). FDR is calculated as the number of incorrect non-zeros in wb divided by the total number of non-zeros in wb. TPR is computed as the number of correct non-zeros in wb relative to k (the number of relevant features). In Plot 2, we depict these values, with FDR on the x-axis and TPR on the y-axis.
+
+### c. Observing the Impact of λ
+
+The two plots in sections 'a' and 'b' provide a comprehensive view of how λ affects the Lasso solutions. In general, as we vary λ, we observe how the sparsity of the solution changes (plot 1) and how it impacts the trade-off between false discoveries and true positives (plot 2).
+
+## Conclusion
+
+In conclusion, the analysis of synthetic data provides us with a solid foundation to understand how Lasso regression can effectively distinguish between relevant and irrelevant features. The relationship between λ and the sparsity of the solution, as well as its impact on false discoveries and true positives, is crucial for making informed data-driven decisions.
 
 **Historical Policies and Influential Features:**
 
